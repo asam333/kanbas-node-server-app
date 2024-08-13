@@ -26,5 +26,5 @@ export default function AssignmentRoutes(app){
             (a) => a._id === aid);
           db.assignments[assignmentIndex] = {...db.assignments[assignmentIndex],...req.body};
         res.sendStatus(204);
-    });
+    }); 
 }
