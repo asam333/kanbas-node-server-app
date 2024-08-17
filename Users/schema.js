@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import courseSchema from "../Kanbas/Courses/schema.js";
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -8,13 +9,14 @@ const userSchema = new mongoose.Schema({
     dob: Date,
     role: {
         type: String,
-        enum: ["STUDENT", "FACULTY", "ADMIN", "USER"],
+        enum: ["STUDENT", "FACULTY", "TA"],
         default: "USER",
     },
     loginId: String,
     section: String,
     lastActivity: Date,
     totalActivity: String,
+    courses: [courseSchema]
 },
     { collection: "users" }
 );
