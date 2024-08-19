@@ -6,3 +6,5 @@ export const updateQuizPublishStatus = (id) =>
         quiz.published = !quiz.published;
         return quiz.save();
     });
+export const createQuiz = (quiz) => quizModel.create(quiz);
+export const updateQuiz = (id, quiz) =>quizModel.updateOne({_id: id}, {$set: quiz});
