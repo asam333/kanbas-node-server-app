@@ -1,13 +1,22 @@
-import courseModel from "./model.js";
-export const getAllCourses = () => courseModel.find();
+import model from "./model.js";
 
-export const createCourse = (course) => {
-    return courseModel.create(course);
-};
+export const createCourse = async (courseData) => {
+  delete courseData._id;
+  return await model.create(courseData);
+}
 
-export const deleteCourse = (courseId) => courseModel.deleteOne({ _id: courseId });
+export const findAllCourses = async () => {
+  return await model.find();
+}
 
-export const updateCourse = (courseId, course) =>
-    courseModel.updateOne({ _id: courseId }, { $set: course });
+export const findCourseById = async (courseId) => {
+  return await model.findById(courseId);
+}
 
-export const findCourseById = (courseId) => courseModel.findById(courseId);
+export const updateCourse = async (courseId, courseData) => {
+  return await model.findByIdAndUpdate(courseId, courseData, { new: true });
+}
+
+export const deleteCourse = async (courseId) => {
+  return await model.findByIdAndDelete(courseId);
+}

@@ -1,33 +1,65 @@
-import * as dao from "./dao.js";
+import * as dao from './dao.js';
+
 export default function QuizRoutes(app) {
-    const getAllQuizzes = async (req, res) => {
-        const { cid } = req.params;
-        const quizzes = await dao.getAllQuizzes(cid);
-        res.json(quizzes);
-    };
-    const deleteQuiz = async (req, res) => {
-        const { qid } = req.params;
-        const status = await dao.deleteQuiz(qid);
-        res.json(status);
+  app.get("/api/courses/:cid/quizzes", async (req, res) => {
+    const { cid } = req.params;
+    try {
+      const quizzes = await dao.findQuizzesByCourse(cid);
+      res.json(quizzes);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    const updateQuizPublishStatus = async (req, res) => {
-        const { qid } = req.params;
-        const status = await dao.updateQuizPublishStatus(qid);
-        res.json(status);
-    }
-    const createQuiz = async (req, res) => {
-        const newQuiz = req.body;
-        const quiz = await dao.createQuiz(newQuiz);
+  });
+  
+  app.get("/api/quizzes/:qid", async (req, res) => {
+    const { qid } = req.params;
+    try {
+      const quiz = await dao.findQuizById(qid);
+      if (!quiz) {
+        res.status(404).send('Quiz not found');
+      } else {
         res.json(quiz);
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    const updateQuiz = async (req, res) => {
-        const { qid } = req.params;
-        const status = await dao.updateQuiz(qid, req.body);
-        res.json(status);
-    };
-    app.get("/api/courses/:cid/quizzes", getAllQuizzes);
-    app.delete("/api/quizzes/:qid", deleteQuiz);
-    app.put("/api/quizzes/:qid/publish", updateQuizPublishStatus);
-    app.post("/api/quizzes", createQuiz);
-    app.put("/api/quizzes/:qid", updateQuiz);
+  });
+
+  app.post("/api/courses/:cid/quizzes", async (req, res) => {
+    const { cid } = req.params;
+    try {
+      const newQuiz = await dao.createQuiz({ ...req.body, course: cid });
+      res.status(201).json(newQuiz);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/quizzes/:qid", async (req, res) => {
+    const { qid } = req.params;
+    try {
+      const updatedQuiz = await dao.updateQuiz(qid, req.body);
+      if (!updatedQuiz) {
+        res.status(404).send('Quiz not found');
+      } else {
+        res.sendStatus(204);
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/quizzes/:qid", async (req, res) => {
+    const { qid } = req.params;
+    try {
+      const result = await dao.deleteQuiz(qid);
+      if (result) {
+        res.sendStatus(204);
+      } else {
+        res.status(404).send('Quiz not found');
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 }

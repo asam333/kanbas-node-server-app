@@ -1,13 +1,21 @@
-import quizModel from "./model.js";
-export const getAllQuizzes = (cid) => quizModel.find({ course: cid });
-export const deleteQuiz = (id) => quizModel.deleteOne({ _id: id });
-export const updateQuizPublishStatus = (id) =>
-    quizModel.findById(id).then(quiz => {
-        quiz.published = !quiz.published;
-        return quiz.save();
-    });
-export const createQuiz = (quiz) => {
-    delete quiz._id;
-    quizModel.create(quiz)
+import Quiz from './model.js';
+
+export const createQuiz = async (quizData) => {
+  return await Quiz.create(quizData);
 };
-export const updateQuiz = (id, quiz) => quizModel.updateOne({ _id: id }, { $set: quiz });
+
+export const findQuizzesByCourse = async (courseId) => {
+  return await Quiz.find({ course: courseId });
+};
+
+export const findQuizById = async (quizId) => {
+  return await Quiz.findById(quizId);
+};
+
+export const updateQuiz = async (quizId, quizData) => {
+  return await Quiz.findByIdAndUpdate(quizId, quizData, { new: true });
+};
+
+export const deleteQuiz = async (quizId) => {
+  return await Quiz.findByIdAndDelete(quizId);
+};

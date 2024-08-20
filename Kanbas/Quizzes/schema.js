@@ -1,29 +1,22 @@
 import mongoose from "mongoose";
 const quizSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    title: { type: String, required: true },
     course: { type: String, required: true },
-    availableFrom: String,
-    availableUntil: String,
-    dueDate: String,
-    noq: Number,
-    points: Number,
-    published: Boolean,
-
-    quizType: String,
-    assignmentGroup: String,
-    shuffleAnswers: Boolean,
-    timeLimit: Boolean,
-    timeLimitEntry: Number,
-    allowMultipleAttempts: Boolean,
-    multipleAttempts:Number,
-    showCorrectedAnswers: Boolean,
-    accessCode: Boolean,
-    accessCodeEntry: Number,
-    oneQuestionAtATime: Boolean,
-    webCamRequired: Boolean,
-    lockQuestionsAfterAnswering: Boolean,
-
-},
-    { collection: "quizzes" }
-);
+    description: String,
+    quizType: { type: String, default: 'Graded Quiz' },
+    points: { type: String, default: 100 },
+    assignmentGroup: { type: String, default: 'Quizzes' },
+    shuffleAnswers: { type: Boolean, default: true },
+    timeLimit: { type: String, default: 20 },
+    multipleAttempts: { type: Boolean, default: false },
+    showCorrectAnswers: String,
+    accessCode: String,
+    oneQuestionAtATime: { type: Boolean, default: true },
+    webcamRequired: { type: Boolean, default: false },
+    lockQuestionsAfterAnswering: { type: Boolean, default: false },
+    dueDate: Date,
+    availableDate: Date,
+    untilDate: Date,
+    questions: []
+});
 export default quizSchema;

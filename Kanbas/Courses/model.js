@@ -1,4 +1,4 @@
 import mongoose from "mongoose";
-import schema from "./schema.js";
-const courseModel = mongoose.model("CourseModel", schema);
-export default courseModel;
+import courseSchema from "./schema.js";
+const model = mongoose.model('Coursemodel', courseSchema);
+export default model;
