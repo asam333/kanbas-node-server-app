@@ -25,8 +25,6 @@ export default function QuizRoutes(app) {
         const status = await dao.updateQuiz(qid, req.body);
         res.json(status);
     };
-
-
     app.get("/api/courses/:cid/quizzes", getAllQuizzes);
     app.delete("/api/quizzes/:qid", deleteQuiz);
     app.put("/api/quizzes/:qid/publish", updateQuizPublishStatus);
