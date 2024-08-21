@@ -1,37 +1,30 @@
 import * as dao from "./dao.js";
 
 export default function CourseRoutes(app) {
-  const getAllCourses = async (req, res) => {
-    const courses = await dao.getAllCourses();
-    res.json(courses);
-  };
 
-  const createCourse = async (req, res) => {
-    const course = await dao.createCourse(req.body);
-    res.json(course);
-  };
+    app.post("/api/courses", async (req, res) => {
+        const course = {
+            ...req.body
+        };
+        const status = await dao.createCourse(course);
+        res.json(status);
+    });
 
-  const deleteCourse = async (req, res) => {
-    const { courseId } = req.params;
-    const status = await dao.deleteCourse(courseId);
-    res.json(status);
-  };
+    app.delete("/api/courses/:id", async (req, res) => {
+        const {id} = req.params;
+        const status = await dao.deleteCourse(id);
+        res.json(status);
+    });
 
-  const updateCourse = async (req, res) => {
-    const { courseId } = req.params;
-    const status = await dao.updateCourse(courseId, req.body);
-    res.json(status);
-  };
-  // might not needed ...
-  const findCourseById = async (req, res) => {
-    const { courseId } = req.params;
-    const course = await dao.findCourseById(courseId);
-    res.json(course);
-  };
+    app.put("/api/courses/:id", async (req, res) => {
+        const {id} = req.params;
+        const course = req.body;
+        const status = await dao.updateCourse(id, course);
+        res.json(status);
+    });
 
-  app.get("/api/courses", getAllCourses);
-  app.post("/api/courses", createCourse);
-  app.delete("/api/courses/:courseId", deleteCourse);
-  app.put("/api/courses/:courseId", updateCourse);
-  app.get("/api/courses/:courseId", findCourseById);
+    app.get("/api/courses", async (req, res) => {
+        const courses = await dao.findAllCourses();
+        res.json(courses);
+    });
 }
